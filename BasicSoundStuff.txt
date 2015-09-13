@@ -1,0 +1,22 @@
+Music Stuff basic write-up:
+
+Every track of sound is actually a collection of clips of variable length, using the processing.sound library.
+Each track will be its own object, with two arrays- one will contain the individual soundFiles,
+and the other will hold the length in milliseconds of each clip.
+
+There will be a playNextClip() method. It will take the track number of the current clip, 
+and using a custom gaussian distribution dependent upon the clip that just ended, randomly determine
+what the next clip will be. Different clips will have certain others weighted to play after them,
+but any clip could follow up any other clip within the track.
+
+When a track change is detected, the current one will begin to decrease in volume as the other 'enters,'
+starting quiet and getting louder- most likely inversely proportional to each other.
+Effects might be applied to either track as this transition occurs. I might or might not 
+make special clips for each track that plays when it enters or when it exits.
+
+Depending upon the number of clips in a track, the standard deviation may need to be changed.
+
+When a new clip is played, a variable will record the milliseconds since the start of the program
+at that moment, and then the program will read the duration in milliseconds of the clip being played.
+
+Once that duration has passed, a new clip will play and the tracking milliseconds variable will be updated.
