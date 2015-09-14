@@ -13,6 +13,7 @@ class Node {
     nodes = new ArrayList<Node>();
   }
 
+  //Checks if the coords are inside the node
   boolean insideNode(float nx, float ny) {
     if (radius > (float)Math.hypot(nx -x, ny -y)) {
       return true;
@@ -20,6 +21,7 @@ class Node {
     return false;
   }
   
+  //Checks if the coords are inside a given radius to the node
   boolean insideNode(float nx, float ny, float r) {
     if (radius +r > (float)Math.hypot(nx -x, ny -y)) {
       return true;
@@ -27,13 +29,17 @@ class Node {
     return false;
   }
 
+  //Adds a connection to the node if that node is within the connectRadius
   void connect(Node n) {
-    if (connectRadius > (float)Math.hypot(n.x - x, n.y - y) && n != this) {
+    
+    float dist = (float)Math.hypot(n.x - x, n.y - y);
+    
+    if (connectRadius > dist && n!= this) {
       nodes.add(n);
     }
-    else if(connectRadius < (float)Math.hypot(n.x - x, n.y - y) && n!= this){
+    else if(connectRadius < dist && n!= this){
       for(int i=0; i<nodes.size(); i++){
-        if(nodes.get(i) == n){ nodes.remove(nodes.get(i)); }
+        nodes.remove(n);
       }
     }
   }
@@ -51,7 +57,7 @@ class Node {
 
     stroke(0, 0);
     fill(color(0, 0, 0, 10));
-    ellipse(x, y, connectRadius, connectRadius);
+    //ellipse(x, y, connectRadius, connectRadius);
     
     if (!selected) {
       stroke(0);

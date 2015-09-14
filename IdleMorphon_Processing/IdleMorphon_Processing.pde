@@ -1,9 +1,10 @@
 ArrayList<Node> nodes;
-boolean dragging, draggingNode; 
+boolean dragging, draggingNode, paused; 
 float dragX, dragY;
 
 void setup() {
   nodes = new ArrayList<Node>();
+  paused = false;
 
   size(500, 500);
 }
@@ -42,6 +43,12 @@ void mousePressed() {
   dragY = mouseY;
 }
 
+void keyPressed() {
+  if(!paused){paused = true;}
+  else{paused = false;}
+  
+}
+
 void mouseReleased() {
   dragging = false;
   draggingNode = false;
@@ -67,8 +74,8 @@ void step(Node n) {
   }
 
   for (Node m : nodes) {
-    n.connect(m);
-    if (n.insideNode(m.x, m.y, 30) && !n.selected && !m.selected) {
+    if (n.insideNode(m.x, m.y, n.connectRadius/2) && !n.selected && !m.selected) {
+      m.connect(n);
       if (n.x > m.x) {
         n.x++; 
         m.x--;
@@ -92,7 +99,9 @@ void draw() {
 
   for (Node n : nodes) {
     n.display();
-    step(n);
+    if (!paused) {
+      step(n);
+    }
   }
 }
 
