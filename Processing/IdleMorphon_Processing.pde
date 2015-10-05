@@ -5,7 +5,7 @@ float dragX, dragY;
 void setup() {
   nodes = new ArrayList<Node>();
   paused = false;
-
+  
   size(500, 500);
 }
 
