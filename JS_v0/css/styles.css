@@ -28,14 +28,16 @@ body{
 	right: 0px;
 }
 
-.node {
-  fill: #000;
-  cursor: crosshair;
+.resourceLabel{
+	position: absolute;
+	left: 20px;
+	z-index: 20;
 }
 
+//SVG
+
 .node_selected {
-  fill: #ff7f0e;
-  stroke: #ff7f0e;
+  stroke: #FF0;
 }
 
 .drag_line {
@@ -58,4 +60,22 @@ body{
 
 .link_selected {
   stroke: #ff7f0e;
+}
+
+//Node types
+.node {
+  fill: #999;
+  cursor: crosshair;
+}
+.storage{
+	fill: #FA0;
+	cursor: crosshair;
+}
+.collector{
+	fill: #FA0;
+	cursor: crosshair;
+}
+.anchor{
+	fill: #000;
+	cursor: crosshair;
 }

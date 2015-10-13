@@ -2,6 +2,16 @@ var width = 1200,
     height = 750,
     fill = d3.scale.category20();
 
+//Node Types
+var currentNodeType = 0,
+    nodeTypes = ["node", "storage", "collector"];
+    nodeSizes = [20, 30, 10]
+    nodeCost = [5, 100, 20];
+
+//Resources
+var resourceOrange = 200, resourceOrangeCap = 250;
+
+//BASIC GRAPH FUNCTIONALITY
 var selected_node = null,
     selected_link = null,
     mousedown_link = null,
@@ -31,7 +41,7 @@ vis.append('svg:rect')
 var force = d3.layout.force()
     .size([width, height])
     .nodes([{}])
-    .linkDistance(50)
+    .linkDistance(100)
     .charge(-200)
     .on("tick", tick);
 
@@ -77,7 +87,7 @@ function mouseup() {
     drag_line
       .attr("class", "drag_line_hidden")
 
-    if (!mouseup_node) {
+    if (!mouseup_node && resourceOrange >= nodeCost[currentNodeType]) {
       var point = d3.mouse(this),
         node = {x: point[0], y: point[1]},
         n = nodes.push(node);
@@ -86,6 +96,8 @@ function mouseup() {
       selected_link = null;
       
       links.push({source: mousedown_node, target: node});
+
+      resourceOrange -= nodeCost[currentNodeType];
     }
 
     redraw();
@@ -99,6 +111,7 @@ function resetMouseVars() {
   mousedown_link = null;
 }
 
+//Updates every tick!
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
@@ -107,6 +120,22 @@ function tick() {
 
   node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
+}
+
+window.setInterval(collectResources(), 3000);
+
+function collectResources(){
+  var addOrange = 0;
+  var collectors = document.getElementsByClassName('collector');
+  for(var i=0; i<collectors.length; i++){
+    addOrange += 0.01;
+  }
+
+  resourceOrange += addOrange;
+
+  //Update gauges
+  //gaugeOrange.update(((resourceOrange*100)/resourceOrangeCap).toFixed(0));
+  console.log(resourceOrange);
 }
 
 function rescale() {
@@ -141,8 +170,8 @@ function redraw() {
   node = node.data(nodes);
 
   node.enter().insert("circle")
-      .attr("class", "node")
-      .attr("r", 5)
+      .attr("class", nodeTypes[currentNodeType])
+      .attr("r", nodeSizes[currentNodeType])
       .on("mousedown", 
         function(d) { 
           // disable zoom
@@ -185,11 +214,7 @@ function redraw() {
             vis.call(d3.behavior.zoom().on("zoom"), rescale);
             redraw();
           } 
-        })
-    .transition()
-      .duration(750)
-      .ease("elastic")
-      .attr("r", 6.5);
+        });
 
   node.exit().transition()
       .attr("r", 0)
@@ -218,7 +243,7 @@ function spliceLinksForNode(node) {
 }
 
 function keydown() {
-  if (!selected_node && !selected_link) return;
+  //if (!selected_node && !selected_link) return;
   switch (d3.event.keyCode) {
     case 8: // backspace
     case 46: { // delete
@@ -233,6 +258,11 @@ function keydown() {
       selected_node = null;
       redraw();
       break;
+    }
+    case 32: {
+      currentNodeType++;
+      if(currentNodeType > nodeTypes.length-1){currentNodeType = 0;}
+      console.log(nodeTypes[currentNodeType]);
     }
   }
 }

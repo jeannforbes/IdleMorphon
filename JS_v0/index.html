@@ -19,9 +19,20 @@
   	<div id="title">IdleMorphon</div>
   </div>
 
+  <svg id="gaugeOrange" style="position:absolute;top:40px;width:100px;z-index:20;"></svg>
+
   <div id="svgcontainer"></div>
 
-  <script src="http://d3js.org/d3.v2.min.js"></script>
-  <script src="js/scripts.js"></script>
+  <script src = "http://d3js.org/d3.v2.min.js"></script>
+  <script src = "js/scripts.js"></script>
+  <script src = "js/liquidFillGauge.js"></script>
+
+  <script>
+    var configOrange = liquidFillGaugeDefaultSettings();
+    configOrange.waveColor = '#FA0';
+    configOrange.waveTextColor = '#FFF';
+    var gaugeOrange = loadLiquidFillGauge("gaugeOrange", (resourceOrange*100)/resourceOrangeCap, configOrange);
+  </script>
+
 </body>
 </html>
