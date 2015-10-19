@@ -31,6 +31,7 @@ body{
 .resourceLabel{
 	position: absolute;
 	left: 20px;
+	top: 200px;
 	z-index: 20;
 }
 
@@ -75,7 +76,7 @@ body{
 	fill: #FA0;
 	cursor: crosshair;
 }
-.anchor{
-	fill: #000;
+.net{
+	fill: #999;
 	cursor: crosshair;
 }

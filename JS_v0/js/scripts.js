@@ -2,14 +2,29 @@ var width = 1200,
     height = 750,
     fill = d3.scale.category20();
 
+//Resources
+var resourceOrange = 20, resourceOrangeCap = 20;
+
 //Node Types
 var currentNodeType = 0,
-    nodeTypes = ["node", "storage", "collector"];
-    nodeSizes = [20, 30, 10]
-    nodeCost = [5, 100, 20];
+    nodeTypes = ["storage", "collector", "net"];
+    nodeSizes = [30, 10, 10]
+    nodeCost = [15 + resourceOrangeCap/10, 10, resourceOrangeCap/15];
 
-//Resources
-var resourceOrange = 200, resourceOrangeCap = 250;
+//Gauges
+var configOrange = liquidFillGaugeDefaultSettings();
+    configOrange.waveColor = '#FA0';
+    configOrange.waveTextColor = '#FFF';
+var gaugeOrange = loadLiquidFillGauge("gaugeOrange", (resourceOrange*100)/resourceOrangeCap, configOrange);
+
+//Particles
+var particles = [];
+
+function Particle(type){
+  this.type = type;
+  this.x = Math.random()*width;
+  this.y = Math.random()*height;
+}
 
 //BASIC GRAPH FUNCTIONALITY
 var selected_node = null,
@@ -111,7 +126,7 @@ function resetMouseVars() {
   mousedown_link = null;
 }
 
-//Updates every tick!
+//Updates only when the graph needs ticks.
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
@@ -122,20 +137,73 @@ function tick() {
       .attr("cy", function(d) { return d.y; });
 }
 
-window.setInterval(collectResources(), 3000);
+window.setInterval(collectResources, 100);
+window.setInterval(updateParticles, 50);
+window.setInterval(updateGauges, 1000);
 
+//Collects resources
 function collectResources(){
   var addOrange = 0;
   var collectors = document.getElementsByClassName('collector');
   for(var i=0; i<collectors.length; i++){
-    addOrange += 0.01;
+    addOrange += 0.05;
   }
 
+  resourceOrangeCap = 10 + (10*document.getElementsByClassName('storage').length);
   resourceOrange += addOrange;
+  if(resourceOrange > resourceOrangeCap){
+   resourceOrange = resourceOrangeCap;
+  }
+}
 
-  //Update gauges
-  //gaugeOrange.update(((resourceOrange*100)/resourceOrangeCap).toFixed(0));
-  console.log(resourceOrange);
+//Update particles
+function updateParticles(){
+  
+  //Clear old drawings
+  var oldParticles = document.getElementsByClassName('particle');
+  for (var i = 0; i < oldParticles.length; i++) {
+      oldParticles[i].parentNode.removeChild(oldParticles[i]);
+  }
+
+  //Create new particles
+  if(Math.random()> 0.9 && particles.length < 30){ particles[particles.length] = new Particle('orange');}
+
+  var netNodes = document.getElementsByClassName('net');
+  for(var i=0; i<particles.length; i++){
+    //Check for collisions with net nodes
+    for(var k=0; k<netNodes.length; k++){
+      var n = netNodes[k];
+      if(distBetweenPoints(particles[i].x, n.getAttribute('cx'), particles[i].y, n.getAttribute('cy')) < n.getAttribute('r')+1){
+        particles[i] = new Particle('orange');
+        resourceOrange += resourceOrangeCap/5;
+      }
+    }
+
+    //Update particles' positions
+    particles[i].x += Math.random()*3;
+    if(Math.random() > 0.5){ particles[i].y++;}
+    else{ particles[i].y--;}
+
+    //Recycle if they reach the edge of the screen
+    if(particles[i].x > width){ particles[i].x = -Math.random()*100;}
+  }
+    //DRAW PARTICLES
+  vis.selectAll("particle")
+      .data(particles)
+    .enter().append("svg:circle")
+      .attr("id", function(d, i) { 
+        return "p"+i; })
+      .attr("transform", function(d) { return "translate(" + d.x + ","+d.y+")"; })
+      .attr("r", 5)
+      .attr('stroke', 'none')
+      .attr('fill', function(d){return d.type})
+      .attr('class', 'particle');
+}
+
+//Updates gauges
+function updateGauges(){
+  document.getElementById('orangeLabel').innerHTML = resourceOrange.toFixed(0) +'/'+ resourceOrangeCap;
+  gaugeOrange.update(((resourceOrange*100)/resourceOrangeCap).toFixed(0));
 }
 
 function rescale() {
@@ -149,6 +217,7 @@ function rescale() {
 
 function redraw() {
 
+  //DRAW GRAPH
   link = link.data(links);
 
   link.enter().insert("line", ".node")
@@ -160,7 +229,7 @@ function redraw() {
           else selected_link = mousedown_link; 
           selected_node = null; 
           redraw(); 
-        })
+        });
 
   link.exit().remove();
 
@@ -191,6 +260,7 @@ function redraw() {
               .attr("y2", mousedown_node.y);
 
           redraw(); 
+          updateGauges();
         })
       .on("mousedrag",
         function(d) {
@@ -265,4 +335,8 @@ function keydown() {
       console.log(nodeTypes[currentNodeType]);
     }
   }
+}
+
+function distBetweenPoints(x1, x2, y1, y2){
+  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
