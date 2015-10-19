@@ -4,15 +4,14 @@ var curClip = 0;
 
 var curStart = Date.now();
 
-var audio_Files = [ '../Sounds/MainTheme/BaseClip1.ogg', '../Sounds/MainTheme/BaseClip2.ogg',
-					'../Sounds/MainTheme/BaseClip3.ogg', '../Sounds/MainTheme/BaseClip4.ogg',
-					'../Sounds/MainTheme/BaseClip5.ogg', '../Sounds/MainTheme/BaseClip6.ogg',
-					'../Sounds/MainTheme/BaseClip7.ogg', '../Sounds/MainTheme/BaseClip8.ogg',
-					'../Sounds/MainTheme/BaseClip9.ogg', '../Sounds/MainTheme/BaseClip10.ogg' ];
+var path = '../Sounds/';
 
+var tracks = 'MainTheme/BaseClip';
+
+var extension = '.ogg';
 
 var audio = new Audio();
-audio.src = audio_Files[curClip];
+audio.src = path + tracks + curClip + extension;;
 audio.load;
 audio.play();
 
@@ -189,7 +188,7 @@ function changeSound()
 	if(Date.now() - curStart >= clipLengths[curClip])
 	{
 		curClip = detNext(curClip);
-		audio.src = audio_Files[curClip];
+		audio.src = path + tracks + curClip + extension;
 		curStart = Date.now();
 		audio.load;
 		audio.play();
