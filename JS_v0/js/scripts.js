@@ -3,19 +3,41 @@ var width = 1200,
     fill = d3.scale.category20();
 
 //Resources
-var resourceOrange = 20, resourceOrangeCap = 20;
+var resRed = new Resource('red');
+var resBlue = new Resource('blue');
+var resYellow = new Resource('yellow');
+var resGreen = new Resource('green');
+var resOrange = new Resource('orange');
+var resPurple = new Resource('purple');
+var resources = [resRed, resBlue, resYellow, resGreen, resOrange, resPurple];
+function Resource(c){
+  this.c = c;
+  this.container = 'gauge'+c;
+  this.val = 20;
+  this.cap = 20;
+}
 
 //Node Types
 var currentNodeType = 0,
     nodeTypes = ["storage", "collector", "net"];
     nodeSizes = [30, 10, 10]
-    nodeCost = [15 + resourceOrangeCap/10, 10, resourceOrangeCap/15];
+    nodeCost = [5, 5, 5];
 
 //Gauges
-var configOrange = liquidFillGaugeDefaultSettings();
-    configOrange.waveColor = '#FA0';
-    configOrange.waveTextColor = '#FFF';
-var gaugeOrange = loadLiquidFillGauge("gaugeOrange", (resourceOrange*100)/resourceOrangeCap, configOrange);
+var gauges = [];
+var gaugeRed, gaugeBlue, gaugeYellow, gaugeGreen, gaugeOrange, gaugePurple;
+
+addGauge(resRed, gaugeRed);
+addGauge(resBlue, gaugeBlue);
+addGauge(resYellow, gaugeYellow);
+function addGauge(res, gauge){
+  var config = liquidFillGaugeDefaultSettings();
+    config.textColor = '#FFF';
+    config.waveColor = res.c;
+    config.waveTextColor = res.c;
+  gauge = loadLiquidFillGauge(res.container, (res.val*100)/res.cap, config);
+  gauges[gauges.length] = gauge;
+}
 
 //Particles
 var particles = [];
@@ -102,7 +124,7 @@ function mouseup() {
     drag_line
       .attr("class", "drag_line_hidden")
 
-    if (!mouseup_node && resourceOrange >= nodeCost[currentNodeType]) {
+    if (!mouseup_node && resRed >= nodeCost[currentNodeType]) {
       var point = d3.mouse(this),
         node = {x: point[0], y: point[1]},
         n = nodes.push(node);
@@ -112,7 +134,7 @@ function mouseup() {
       
       links.push({source: mousedown_node, target: node});
 
-      resourceOrange -= nodeCost[currentNodeType];
+      resRed -= nodeCost[currentNodeType];
     }
 
     redraw();
@@ -143,17 +165,6 @@ window.setInterval(updateGauges, 1000);
 
 //Collects resources
 function collectResources(){
-  var addOrange = 0;
-  var collectors = document.getElementsByClassName('collector');
-  for(var i=0; i<collectors.length; i++){
-    addOrange += 0.05;
-  }
-
-  resourceOrangeCap = 10 + (10*document.getElementsByClassName('storage').length);
-  resourceOrange += addOrange;
-  if(resourceOrange > resourceOrangeCap){
-   resourceOrange = resourceOrangeCap;
-  }
 }
 
 //Update particles
@@ -166,7 +177,7 @@ function updateParticles(){
   }
 
   //Create new particles
-  if(Math.random()> 0.9 && particles.length < 30){ particles[particles.length] = new Particle('orange');}
+  if(Math.random()> 0.9 && particles.length < 50){ particles[particles.length] = new Particle('gray');}
 
   var netNodes = document.getElementsByClassName('net');
   for(var i=0; i<particles.length; i++){
@@ -174,8 +185,7 @@ function updateParticles(){
     for(var k=0; k<netNodes.length; k++){
       var n = netNodes[k];
       if(distBetweenPoints(particles[i].x, n.getAttribute('cx'), particles[i].y, n.getAttribute('cy')) < n.getAttribute('r')+1){
-        particles[i] = new Particle('orange');
-        resourceOrange += resourceOrangeCap/5;
+        particles[i] = new Particle('gray');
       }
     }
 
@@ -194,7 +204,7 @@ function updateParticles(){
       .attr("id", function(d, i) { 
         return "p"+i; })
       .attr("transform", function(d) { return "translate(" + d.x + ","+d.y+")"; })
-      .attr("r", 5)
+      .attr("r", 1.5)
       .attr('stroke', 'none')
       .attr('fill', function(d){return d.type})
       .attr('class', 'particle');
@@ -202,8 +212,9 @@ function updateParticles(){
 
 //Updates gauges
 function updateGauges(){
-  document.getElementById('orangeLabel').innerHTML = resourceOrange.toFixed(0) +'/'+ resourceOrangeCap;
-  gaugeOrange.update(((resourceOrange*100)/resourceOrangeCap).toFixed(0));
+  for(var i=0; i<gauges.length; i++){
+    gauges[i].update(((resources[i].val*100)/resources[i].cap).toFixed(0));
+  }
 }
 
 function rescale() {
