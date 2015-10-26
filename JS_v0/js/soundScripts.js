@@ -6,13 +6,21 @@ var curStart = Date.now();
 
 var path = '../Sounds/';
 
-var tracks = 'MainTheme/BaseClip';
+var tracks = 'Draft2/';
 
 var extension = '.ogg';
 
+var loopTrack = new Audio();
+loopTrack.src = path + tracks + 'MainLoop' + extension;
+loopTrack.load;
+loopTrack.loop = true;
+loopTrack.volume = 0.5
+loopTrack.play();
+
 var audio = new Audio();
-audio.src = path + tracks + curClip + extension;;
+audio.src = path + tracks + 'Clip' + curClip + extension;
 audio.load;
+audio.volume = 1.0;
 audio.play();
 
 //Make the entire thing one audio file, fast forward to the appropriate clips.
@@ -185,10 +193,10 @@ function detNext(prevClip)
 
 function changeSound()
 {
-	if(Date.now() - curStart >= clipLengths[curClip])
+	if(Date.now() - curStart >= audio.duration*1000)
 	{
 		curClip = detNext(curClip);
-		audio.src = path + tracks + curClip + extension;
+		audio.src = path + tracks + 'Clip' + curClip + extension;
 		curStart = Date.now();
 		audio.load;
 		audio.play();
