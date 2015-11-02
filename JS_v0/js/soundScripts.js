@@ -1,6 +1,6 @@
 var rand = new Ziggurat();
 
-var curClip = [0, 0];
+var curClip = [0, 3];
 
 var curStart = Date.now();
 
@@ -18,7 +18,7 @@ var loopTrack = new Audio();
 loopTrack.src = path + tracks[1] + 'MainLoop' + extension;
 loopTrack.load;
 loopTrack.loop = true;
-loopTrack.volume = 0.25;
+loopTrack.volume = 0.5;
 loopTrack.play();
 
 var audio = new Audio();
