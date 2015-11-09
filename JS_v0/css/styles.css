@@ -76,6 +76,11 @@ body{
 	fill: #CA0;
 	cursor: crosshair;
 }
+.yellowstorage{
+	fill: #FE0;
+	stroke: #A90;
+	stroke-width:3;
+}
 .redbasic{
 	fill: #F00;
 	cursor: crosshair;

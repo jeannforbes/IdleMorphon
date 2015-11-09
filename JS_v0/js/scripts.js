@@ -16,12 +16,17 @@ function Resource(c){
   this.val = 10;
   this.cap = 50;
 }
+var yellowbasic = new NodeType('yellow');
+var yellowadvanced = new NodeType('yellow');
+function NodeType(res){
+  this.resType = res;
+}
 
 //Node Types
 var currentNodeType = 0,
-    nodeTypes = ['yellowbasic', 'yellowadvanced', 'redbasic', 'redadvanced', 'bluebasic', 'blueadvanced'],
-    nodeSizes = [10, 20, 10, 20, 10, 20],
-    nodeCost =  [0, 20, 20, 40, 5, 10];
+    nodeTypes = ['yellowbasic', 'yellowadvanced', 'yellowstorage'],//, 'redbasic', 'redadvanced', 'bluebasic', 'blueadvanced'],
+    nodeSizes = [10, 15, 30],// 10, 20, 10, 20],
+    nodeCost =  [10, 20, resYellow.cap];//, 20, 40, 5, 10];
 
 //Gauges
 var gauges = [],
@@ -32,10 +37,13 @@ addGauge(resBlue, gaugeBlue);
 addGauge(resYellow, gaugeYellow);
 function addGauge(res, gauge){
   var config = liquidFillGaugeDefaultSettings();
-  config.textColor = '#FFF';
+  config.textColor = '#000';
   config.waveColor = res.c;
-  config.waveTextColor = res.c;
-  gauge = loadLiquidFillGauge(res.container, (res.val*100)/res.cap, config);
+  config.waveTextColor = '#000';
+  config.minValue = 0;
+  config.maxValue = res.cap;
+  //config.displayPercent = '';
+  gauge = loadLiquidFillGauge(res.container, res.val, config);
   gauges[gauges.length] = gauge;
 }
 
@@ -159,13 +167,17 @@ function tick() {
       .attr("cy", function(d) { return d.y; });
 }
 
+//Updates resources on an interval
 window.setInterval(collectResources, 100);
 window.setInterval(updateParticles, 50);
 window.setInterval(updateGauges, 1000);
 
 //Collects resources
 function collectResources(){
+  resYellow.cap = 50 + 50*document.getElementsByClassName('yellowstorage').length;
 }
+
+
 
 //Update particles
 function updateParticles(){
@@ -227,6 +239,15 @@ function rescale() {
 }
 
 function redraw() {
+
+  var yellowNodes = document.getElementsByClassName('yellowbasic');
+  for(var i=0; i<yellowNodes.length; i++){
+    resYellow.val += 0.001;
+  }
+  yellowNodes = document.getElementsByClassName('yellowadvanced');
+  for(var i=0; i<yellowNodes.length; i++){
+  }
+  resYellow.val += 1;
 
   //DRAW GRAPH
   link = link.data(links);
