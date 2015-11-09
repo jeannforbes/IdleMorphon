@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>HTML5 Web Workers</title>
+</head>
+<body>
+<p id="output">Processing…</p>
+
+<script>
+window.onload = function() {
+
+	var output = document.getElementById("output");
+	if (window.Worker) {
+
+		// load web worker
+		var thread = new Worker("webworker.js");
+
+		// message received from web worker
+		thread.onmessage = function(e) {
+			output.textContent = e.data;
+		}
+
+		// start web worker
+		thread.postMessage(999999999);
+
+	}
+	else {
+		output.textContent = "Web Workers are not supported in your browser";
+	}
+
+};
+</script>
+</body>
+</html>
