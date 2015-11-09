@@ -68,15 +68,30 @@ body{
   fill: #999;
   cursor: crosshair;
 }
-.storage{
-	fill: #FA0;
+.yellowbasic{
+	fill: #FC0;
 	cursor: crosshair;
 }
-.collector{
-	fill: #FA0;
+.yellowadvanced{
+	fill: #CA0;
 	cursor: crosshair;
 }
-.net{
-	fill: #999;
+.redbasic{
+	fill: #F00;
+	cursor: crosshair;
+}
+
+.redadvanced{
+	fill: #C00;
+	cursor: crosshair;
+}
+
+.bluebasic{
+	fill: #00F;
+	cursor: crosshair;
+}
+
+.blueadvanced{
+	fill: #00C;
 	cursor: crosshair;
 }

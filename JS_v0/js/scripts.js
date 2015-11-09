@@ -13,28 +13,28 @@ var resources = [resRed, resBlue, resYellow, resGreen, resOrange, resPurple];
 function Resource(c){
   this.c = c;
   this.container = 'gauge'+c;
-  this.val = 20;
-  this.cap = 20;
+  this.val = 10;
+  this.cap = 50;
 }
 
 //Node Types
 var currentNodeType = 0,
-    nodeTypes = ["storage", "collector", "net"];
-    nodeSizes = [30, 10, 10]
-    nodeCost = [5, 5, 5];
+    nodeTypes = ['yellowbasic', 'yellowadvanced', 'redbasic', 'redadvanced', 'bluebasic', 'blueadvanced'],
+    nodeSizes = [10, 20, 10, 20, 10, 20],
+    nodeCost =  [0, 20, 20, 40, 5, 10];
 
 //Gauges
-var gauges = [];
-var gaugeRed, gaugeBlue, gaugeYellow, gaugeGreen, gaugeOrange, gaugePurple;
+var gauges = [],
+    gaugeRed, gaugeBlue, gaugeYellow, gaugeGreen, gaugeOrange, gaugePurple;
 
 addGauge(resRed, gaugeRed);
 addGauge(resBlue, gaugeBlue);
 addGauge(resYellow, gaugeYellow);
 function addGauge(res, gauge){
   var config = liquidFillGaugeDefaultSettings();
-    config.textColor = '#FFF';
-    config.waveColor = res.c;
-    config.waveTextColor = res.c;
+  config.textColor = '#FFF';
+  config.waveColor = res.c;
+  config.waveTextColor = res.c;
   gauge = loadLiquidFillGauge(res.container, (res.val*100)/res.cap, config);
   gauges[gauges.length] = gauge;
 }
@@ -124,7 +124,7 @@ function mouseup() {
     drag_line
       .attr("class", "drag_line_hidden")
 
-    if (!mouseup_node && resRed >= nodeCost[currentNodeType]) {
+    if (!mouseup_node) {
       var point = d3.mouse(this),
         node = {x: point[0], y: point[1]},
         n = nodes.push(node);
