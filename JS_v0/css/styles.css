@@ -93,10 +93,23 @@ body{
 
 .bluebasic{
 	fill: #00F;
+	stroke: #44F;
+	stroke-width:15;
+	stroke-opacity: 0.5;
 	cursor: crosshair;
 }
 
 .blueadvanced{
 	fill: #00C;
+	stroke: #44F;
+	stroke-width:15;
+	stroke-opacity: 0.5;
 	cursor: crosshair;
+}
+
+.bluestorage{
+	fill: #00E;
+	stroke: #44F;
+	stroke-width:15;
+	stroke-opacity: 0.5;
 }

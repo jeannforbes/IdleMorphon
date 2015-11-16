@@ -24,9 +24,9 @@ function NodeType(res){
 
 //Node Types
 var currentNodeType = 0,
-    nodeTypes = ['yellowbasic', 'yellowadvanced', 'yellowstorage'],//, 'redbasic', 'redadvanced', 'bluebasic', 'blueadvanced'],
-    nodeSizes = [10, 15, 30],// 10, 20, 10, 20],
-    nodeCost =  [10, 20, resYellow.cap];//, 20, 40, 5, 10];
+    nodeTypes = ['yellowbasic', 'yellowadvanced', 'yellowstorage', 'bluebasic', 'blueadvanced', 'bluestorage']
+    nodeSizes = [10, 15, 30, 10, 15, 30],
+    nodeCost =  [10, 20, resYellow.cap, 10, 20, resBlue.cap];
 
 //Gauges
 var gauges = [],
@@ -241,11 +241,11 @@ function rescale() {
 function redraw() {
 
   var yellowNodes = document.getElementsByClassName('yellowbasic');
-  for(var i=0; i<yellowNodes.length; i++){
+    for(var i=0; i<yellowNodes.length; i++){
     resYellow.val += 0.001;
   }
   yellowNodes = document.getElementsByClassName('yellowadvanced');
-  for(var i=0; i<yellowNodes.length; i++){
+    for(var i=0; i<yellowNodes.length; i++){
   }
   resYellow.val += 1;
 
@@ -361,7 +361,7 @@ function keydown() {
       redraw();
       break;
     }
-    case 32: {
+    case 32: { //space
       currentNodeType++;
       if(currentNodeType > nodeTypes.length-1){currentNodeType = 0;}
       console.log(nodeTypes[currentNodeType]);
