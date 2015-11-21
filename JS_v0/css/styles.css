@@ -77,24 +77,15 @@ body{
 	cursor: crosshair;
 }
 .yellowstorage{
-	fill: #FE0;
-	stroke: #A90;
+	fill: #A90;
+	stroke: #FE0;
 	stroke-width:3;
-}
-.redbasic{
-	fill: #F00;
-	cursor: crosshair;
-}
-
-.redadvanced{
-	fill: #C00;
-	cursor: crosshair;
 }
 
 .bluebasic{
 	fill: #00F;
 	stroke: #44F;
-	stroke-width:15;
+	stroke-width:30;
 	stroke-opacity: 0.5;
 	cursor: crosshair;
 }
@@ -102,14 +93,27 @@ body{
 .blueadvanced{
 	fill: #00C;
 	stroke: #44F;
-	stroke-width:15;
+	stroke-width:50;
 	stroke-opacity: 0.5;
 	cursor: crosshair;
 }
 
 .bluestorage{
-	fill: #00E;
-	stroke: #44F;
+	fill: #44F;
+	stroke: #00E;
 	stroke-width:15;
 	stroke-opacity: 0.5;
+}
+.greenbasic{
+	fill: #3F3;
+	cursor: crosshair;
+}
+.greenadvanced{
+	fill: #0A0;
+	cursor: crosshair;
+}
+.greenstorage{
+	fill: #040;
+	stroke: #090;
+	stroke-width:3;
 }

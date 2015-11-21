@@ -24,9 +24,11 @@ function NodeType(res){
 
 //Node Types
 var currentNodeType = 0,
-    nodeTypes = ['yellowbasic', 'yellowadvanced', 'yellowstorage', 'bluebasic', 'blueadvanced', 'bluestorage']
-    nodeSizes = [10, 15, 30, 10, 15, 30],
-    nodeCost =  [10, 20, resYellow.cap, 10, 20, resBlue.cap];
+    nodeTypes = ['yellowbasic', 'yellowadvanced', 'yellowstorage',
+     'bluebasic', 'blueadvanced', 'bluestorage',
+     'greenbasic', 'greenadvanced', 'greenstorage']
+    nodeSizes = [10, 15, 30, 10, 15, 30, 10, 15, 30],
+    nodeCost =  [10, 20, resYellow.cap, 10, 20, resBlue.cap, 10, 20, resGreen.cap];
 
 //Gauges
 var gauges = [],
@@ -35,6 +37,7 @@ var gauges = [],
 addGauge(resRed, gaugeRed);
 addGauge(resBlue, gaugeBlue);
 addGauge(resYellow, gaugeYellow);
+addGauge(resGreen, gaugeGreen);
 function addGauge(res, gauge){
   var config = liquidFillGaugeDefaultSettings();
   config.textColor = '#000';
@@ -174,7 +177,18 @@ window.setInterval(updateGauges, 1000);
 
 //Collects resources
 function collectResources(){
+  //Checks cap limits (yellow collects in redraw)
   resYellow.cap = 50 + 50*document.getElementsByClassName('yellowstorage').length;
+  resGreen.cap = 50 + 50*document.getElementsByClassName('greenstorage').length;
+
+  var collectorNodes = document.getElementsByClassName('greenbasic');
+  for(var i=0; i<collectorNodes.length; i++){resGreen.val+= 0.01;}
+  collectorNodes = document.getElementsByClassName('greenadvanced');
+  for(var i=0; i<collectorNodes.length; i++){resGreen.val+= 0.1;}
+
+  //Stops res from going over cap
+  if(resYellow.val > resYellow.cap){resYellow.val = resYellow.cap;}
+  if(resGreen.val > resGreen.cap){resGreen.val = resGreen.cap;}
 }
 
 
@@ -240,6 +254,7 @@ function rescale() {
 
 function redraw() {
 
+  //Collect yellow resources
   var yellowNodes = document.getElementsByClassName('yellowbasic');
     for(var i=0; i<yellowNodes.length; i++){
     resYellow.val += 0.001;
