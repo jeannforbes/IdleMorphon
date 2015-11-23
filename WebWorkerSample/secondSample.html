@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>MDN Example - Embedded worker</title>
+<title>Working Example</title>
 <script type="text/js-worker">
   //taken from the 'embedded workers' page on the mdn.
   // This script WON'T be parsed by JS engines because its mime-type is text/js-worker.
@@ -43,11 +43,11 @@
 
   document.worker.onmessage = function (oEvent) {
     pageLog("Received: " + oEvent.data);
+    document.worker.postMessage("");
   };
 
   // Start the worker.
-  var myFun = function() {document.worker.postMessage("")};
-  setInterval(function() {document.worker.postMessage(""), 100});
+  document.worker.postMessage("");
 </script>
 </head>
 <body><div id="logDisplay"></div></body>

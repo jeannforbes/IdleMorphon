@@ -37,7 +37,7 @@ function reply (/* listener name, argument to pass 1, argument to pass 2, etc. e
 
 onmessage = function (oEvent) {
   if (oEvent.data instanceof Object && oEvent.data.hasOwnProperty("bk4e1h0") && oEvent.data.hasOwnProperty("ktp3fm1")) {
-    queryableFunctions[oEvent.data.bk4e1h0].apply(self, oEvent.data.ktp3fm1);
+    queryableFunctions[oEvent.data.bk4e1h0].apply(this, oEvent.data.ktp3fm1);
   } else {
     defaultQuery(oEvent.data);
   }

@@ -45,7 +45,7 @@
     this.removeListener = function (sName) {
       delete oListeners[sName];
     };
-  };
+  }
 
   // your custom "queryable" worker
   var oMyTask = new QueryableWorker("my_task.js" /* , yourDefaultMessageListenerHere [optional], yourErrorListenerHere [optional] */);
