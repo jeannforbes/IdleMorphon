@@ -17,9 +17,11 @@ window.onload = function() {
 		var thread = new Worker("webworker.js");
 
 		// message received from web worker
-		thread.onmessage = function(e) {
+		thread.onmessage = function(e)
+                {
 			output.textContent = e.data;
-		}
+		};
+                
 
 		// start web worker
 		thread.postMessage(999999999);

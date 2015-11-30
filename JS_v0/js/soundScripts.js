@@ -203,7 +203,7 @@ function changeClip()
     {
 	if(Date.now() - curStart >= audio.duration*1000)
 	{
-            playSFX('Test');
+            //playSFX('Test');
             curClip[1] = detNext(curClip[1]);
             audio.src = path + tracks[1] + 'Clip' + curClip[1] + extension;
             curStart = Date.now();

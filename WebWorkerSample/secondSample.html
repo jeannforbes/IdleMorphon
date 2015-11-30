@@ -43,11 +43,12 @@
 
   document.worker.onmessage = function (oEvent) {
     pageLog("Received: " + oEvent.data);
-    document.worker.postMessage("");
+    //document.worker.postMessage("");
   };
 
   // Start the worker.
-  document.worker.postMessage("");
+  var f = function(){document.worker.postMessage("");};
+  setInterval(f, 50)
 </script>
 </head>
 <body><div id="logDisplay"></div></body>

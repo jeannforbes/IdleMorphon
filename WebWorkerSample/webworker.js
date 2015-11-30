@@ -1,12 +1,14 @@
 // web worker
-onmessage = function(e) {
+function onmessage(e)
+{
+    var r = e.data;
+    var start = new Date.now();
+    msg = "Processing " + r + " items took ";
 
-	var r = e.data,
-		start = new Date(),
-		msg = "Processing " + r + " items took ";
-
-	while (r-- > 0);
-
-	postMessage(msg + (+new Date() - start) + "ms");
+    while (r > 0);
+    {
+        postMessage(msg + (Date.now() - start) + "ms");
+        r--;
+    }
 
 };
