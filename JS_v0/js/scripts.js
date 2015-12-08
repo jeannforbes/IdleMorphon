@@ -28,7 +28,8 @@ var currentNodeType = 0,
      'bluebasic', 'blueadvanced', 'bluestorage',
      'greenbasic', 'greenadvanced', 'greenstorage']
     nodeSizes = [10, 15, 30, 10, 15, 30, 10, 15, 30],
-    nodeCost =  [10, 20, resYellow.cap, 10, 20, resBlue.cap, 10, 20, resGreen.cap];
+    nodeCost =  [10, 20, resYellow.cap, 10, 20, resBlue.cap, 10, 20, resGreen.cap]
+    resNode = [resYellow, resYellow, resYellow, resBlue, resBlue, resBlue, resGreen, resGreen, resGreen];
 
 //Gauges
 var gauges = [],
@@ -144,8 +145,6 @@ function mouseup() {
       selected_link = null;
       
       links.push({source: mousedown_node, target: node});
-
-      resRed -= nodeCost[currentNodeType];
     }
 
     redraw();
@@ -293,21 +292,24 @@ function redraw() {
           // disable zoom
           vis.call(d3.behavior.zoom().on("zoom"), null);
 
-          mousedown_node = d;
-          if (mousedown_node == selected_node) selected_node = null;
-          else selected_node = mousedown_node; 
-          selected_link = null; 
+          if(nodeCost[currentNodeType] <= resNode[currentNodeType].val){
+            mousedown_node = d;
+            if (mousedown_node == selected_node) selected_node = null;
+            else selected_node = mousedown_node; 
+            selected_link = null; 
 
-          // reposition drag line
-          drag_line
-              .attr("class", "link")
-              .attr("x1", mousedown_node.x)
-              .attr("y1", mousedown_node.y)
-              .attr("x2", mousedown_node.x)
-              .attr("y2", mousedown_node.y);
+            // reposition drag line
+            drag_line
+                .attr("class", "link")
+                .attr("x1", mousedown_node.x)
+                .attr("y1", mousedown_node.y)
+                .attr("x2", mousedown_node.x)
+                .attr("y2", mousedown_node.y);
 
-          redraw(); 
-          updateGauges();
+            resNode[currentNodeType].val -= nodeCost[currentNodeType];
+            redraw(); 
+            updateGauges();
+          }
         })
       .on("mousedrag",
         function(d) {
