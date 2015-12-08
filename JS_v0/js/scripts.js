@@ -387,9 +387,23 @@ function keydown() {
       if(currentNodeType > nodeTypes.length-1){currentNodeType = 0;}
       */
       nodeIndMod++;
+      if(nodeIndMod == 1){ 
+        document.getElementsByClassName('UI')[0].innerHTML = " ADV";
+        document.getElementsByClassName('UI')[1].innerHTML = " ADV";
+        document.getElementsByClassName('UI')[2].innerHTML = " ADV";
+      }
+      else if(nodeIndMod == 2){
+        document.getElementsByClassName('UI')[0].innerHTML = " storage";
+        document.getElementsByClassName('UI')[1].innerHTML = " storage";
+        document.getElementsByClassName('UI')[2].innerHTML = " storage";
+      }
+      else{
+        document.getElementsByClassName('UI')[0].innerHTML = " basic";
+        document.getElementsByClassName('UI')[1].innerHTML = " basic";
+        document.getElementsByClassName('UI')[2].innerHTML = " basic";
+      }
       if(nodeIndMod > 2){nodeIndMod = 0;}
       console.log(nodeTypes[currentNodeType+nodeIndMod]);
-
     }
   }
 }

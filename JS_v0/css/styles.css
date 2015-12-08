@@ -117,14 +117,3 @@ body{
 	stroke: #090;
 	stroke-width:3;
 }
-
-//UI
-#invisBox{
-    position: fixed;
-    top:50px;
-    right: 0;
-    height: 100%;
-    width: 150px;
-    background: blue;
-    hover: {background-color: red;}
-}
