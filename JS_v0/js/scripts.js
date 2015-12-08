@@ -29,6 +29,8 @@ var currentNodeType = 0,
      'greenbasic', 'greenadvanced', 'greenstorage']
     nodeSizes = [10, 15, 30, 10, 15, 30, 10, 15, 30],
     nodeCost =  [10, 20, resYellow.cap, 10, 20, resBlue.cap, 10, 20, resGreen.cap];
+    
+var nodeIndMod = 0;
 
 //Gauges
 var gauges = [],
@@ -145,7 +147,7 @@ function mouseup() {
       
       links.push({source: mousedown_node, target: node});
 
-      resRed -= nodeCost[currentNodeType];
+      resRed -= nodeCost[currentNodeType+nodeIndMod];
     }
 
     redraw();
@@ -286,8 +288,8 @@ function redraw() {
   node = node.data(nodes);
 
   node.enter().insert("circle")
-      .attr("class", nodeTypes[currentNodeType])
-      .attr("r", nodeSizes[currentNodeType])
+      .attr("class", nodeTypes[currentNodeType+nodeIndMod])
+      .attr("r", nodeSizes[currentNodeType+nodeIndMod])
       .on("mousedown", 
         function(d) { 
           // disable zoom
@@ -377,13 +379,21 @@ function keydown() {
       break;
     }
     case 32: { //space
-      currentNodeType++;
+      /*currentNodeType++;
       if(currentNodeType > nodeTypes.length-1){currentNodeType = 0;}
-      console.log(nodeTypes[currentNodeType]);
+      */
+      nodeIndMod++;
+      if(nodeIndMod > 2){nodeIndMod = 0;}
+      console.log(nodeTypes[currentNodeType+nodeIndMod]);
+
     }
   }
 }
 
 function distBetweenPoints(x1, x2, y1, y2){
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+}
+
+function changeNode(newVal){
+    currentNodeType = newVal;
 }
